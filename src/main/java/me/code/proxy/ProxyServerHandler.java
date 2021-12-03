@@ -1,10 +1,19 @@
 package me.code.proxy;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.Getter;
 import me.code.protocol.InboundPacket;
 
-public class ProxyClientHandler extends ChannelInboundHandlerAdapter {
+public class ProxyServerHandler extends ChannelInboundHandlerAdapter {
+
+    @Getter
+    private Connection connection;
+
+    public ProxyServerHandler(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
@@ -50,7 +59,7 @@ public class ProxyClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        System.out.println("CLIENT:");
+        System.out.println("SERVER:");
         cause.printStackTrace();
         ctx.close();
     }

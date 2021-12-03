@@ -1,2 +1,7 @@
 port: 25565
 description: "This is my proxy!"
+servers:
+  lobby:
+    host: '127.0.0.1:25567'
+  lobby2:
+    host: '127.0.0.1:25568'

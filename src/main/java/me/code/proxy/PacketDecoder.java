@@ -16,17 +16,21 @@ public class PacketDecoder extends MessageToMessageDecoder<ByteBuf> {
     private PacketState state;
 
     public PacketDecoder() {
-        this.state = PacketState.HANDSHAKE;
+        this.state = PacketState.CLIENT_HANDSHAKE;
+    }
+
+    public PacketDecoder(PacketState state) {
+        this.state = state;
     }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buf, List<Object> list) throws Exception {
-        int length = BufferUtil.readVarInt(buf);;
+//        int length = BufferUtil.readVarInt(buf);
         int packetId = BufferUtil.readVarInt(buf);
 
         Class<? extends InboundPacket> packetClass = state.getPacket(packetId);
         if (packetClass == null) {
-            ctx.close();
+            //ctx.close();
             return;
         }
 

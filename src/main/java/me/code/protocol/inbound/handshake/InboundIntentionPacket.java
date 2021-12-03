@@ -33,9 +33,9 @@ public class InboundIntentionPacket implements InboundPacket {
         PacketDecoder decoder = pipeline.get(PacketDecoder.class);
 
         if (nextState == 1)
-            decoder.setState(PacketState.STATUS);
+            decoder.setState(PacketState.CLIENT_STATUS);
         else if (nextState == 2)
-            decoder.setState(PacketState.LOGIN);
+            decoder.setState(PacketState.CLIENT_LOGIN);
     }
 
     @Override

@@ -1,7 +1,14 @@
 package me.code.util;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
+import se.llbit.nbt.NamedTag;
+import se.llbit.nbt.Tag;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 public class BufferUtil {
@@ -31,6 +38,12 @@ public class BufferUtil {
         return new String(content, 0, length);
     }
 
+    public static Tag readTag(ByteBuf input)
+    {
+        Tag tag = NamedTag.read( new DataInputStream( new ByteBufInputStream( input ) ) );
+        return tag;
+    }
+
     public static void writeVarInt(int i, ByteBuf buf) {
         while ((i & -128) != 0) {
             buf.writeByte(i & 127 | 128);
@@ -49,6 +62,17 @@ public class BufferUtil {
     {
         buf.writeLong( value.getMostSignificantBits() );
         buf.writeLong( value.getLeastSignificantBits() );
+    }
+
+    public static void writeTag(Tag tag, ByteBuf output)
+    {
+        try
+        {
+            tag.write( new DataOutputStream( new ByteBufOutputStream( output ) ) );
+        } catch ( IOException ex )
+        {
+            throw new RuntimeException( "Exception writing tag", ex );
+        }
     }
 
     public static int getVarIntSize(int value) {
